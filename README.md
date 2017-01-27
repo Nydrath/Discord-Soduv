@@ -1,2 +1,2 @@
-# Discord-Soduv
-Soduv Returns
+# Saphrael
+A Discord and IRC divination agent
