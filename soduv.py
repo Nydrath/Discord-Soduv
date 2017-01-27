@@ -38,9 +38,9 @@ def pullcard(message):
     else:
         deck = decks.THOTH
     if "spread" in message:
-        return " ".join(random.sample(deck, 3))
+        return random.sample(deck, 3)
     else:
-        return " "+random.choice(deck)
+        return [random.choice(deck)]
 
 
 # Discord
@@ -50,7 +50,7 @@ discordclient = discord.Client()
 @discordclient.event
 async def on_message(message):
     if "soduv" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
-        await discordclient.send_message(message.channel, message.author.mention+": "+pullcard(message.content))
+        await discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
 
 
 # IRC
@@ -62,7 +62,7 @@ class IRCSoduv(pydle.Client):
 
     def on_message(self, source, target, message):
          if "soduv" in message.lower() or target == source:
-            self.message(source, target+": "+pullcard(message))
+            self.message(source, target+": "+" ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
 
 ircclient = IRCSoduv('Soduv', realname='Soduv')
 ircclient.connect('irc.us.sorcery.net', 6667)
