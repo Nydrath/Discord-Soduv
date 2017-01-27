@@ -1,6 +1,8 @@
 import json
 import discord
 import asyncio
+import decks
+import random
 
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
@@ -17,8 +19,17 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('Soduv') or client.user.mention in message.content:
-        await client.send_message(message.channel, message.author.mention+" pong")
+    if message.content[:5].lower() == "soduv" or client.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
+        if "rw" in message.content:
+            deck = decks.RW_DECK
+        elif "rune" in message.content:
+            deck = decks.RUNES
+        else:
+            deck = decks.THOTH
+        if "spread" in message.content:
+            await client.send_message(message.channel, message.author.mention+" "+" ".join(random.sample(deck, 3)))
+        else:
+            await client.send_message(message.channel, message.author.mention+" "+random.choice(deck))
 
 client.run(clientdata["token"])
 
