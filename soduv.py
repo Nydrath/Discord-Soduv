@@ -1,5 +1,6 @@
 import json
 import discord
+from asyncirc import irc
 import asyncio
 import decks
 import random
@@ -27,28 +28,44 @@ with open("client_data.json", "r") as f:
 #                   ,ZDMMN$=           .OMO.                  7MD.       7ND+               =M.     .Z,              =M. ~MM:.                 ,NM+       .+NMM8$.                 :ZMO.                
                                                                                                                                                                                                        
 
-client = discord.Client()
+def pullcard(message):
+    if "rw" in message:
+        deck = decks.RW_DECK
+    elif "rune" in message:
+        deck = decks.RUNES
+    else:
+        deck = decks.THOTH
+    if "spread" in message:
+        return " ".join(random.sample(deck, 3))
+    else:
+        return " "+random.choice(deck)
 
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
 
-@client.event
+# Discord
+
+discordclient = discord.Client()
+
+@discordclient.event
 async def on_message(message):
-    if message.content[:5].lower() == "soduv" or client.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
-        if "rw" in message.content:
-            deck = decks.RW_DECK
-        elif "rune" in message.content:
-            deck = decks.RUNES
-        else:
-            deck = decks.THOTH
-        if "spread" in message.content:
-            await client.send_message(message.channel, message.author.mention+" "+" ".join(random.sample(deck, 3)))
-        else:
-            await client.send_message(message.channel, message.author.mention+" "+random.choice(deck))
+    if "soduv" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
+        await discordclient.send_message(message.channel, message.author.mention+": "+pullcard(message.content))
 
-client.run(clientdata["token"])
+discordclient.run(clientdata["token"])
+
+
+# IRC
+
+ircclient = irc.connect("irc.us.geo.sorcery.net", 6667)
+ircclient.register("Soduv", "Soduv", "Soduv")
+ircclient.join(["#/div/ination"]) 
+
+@ircclient.on("message")
+def incoming_message(parsed, user, target, text):
+    print(text)
+    # parsed is an RFC1459Message object
+    # user is a User object with nick, user, and host attributes
+    # target is a string representing nick/channel the message was sent to
+    # text is the text of the message
+    if "soduv" in text.lower() or target == user.nick:
+        bot.say(target, user.nick+": "+pullcard(text))
 
