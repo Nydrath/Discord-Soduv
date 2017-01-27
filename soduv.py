@@ -1,9 +1,11 @@
 import json
 import discord
-from asyncirc import irc
+import pydle
 import asyncio
 import decks
 import random
+from tornado.platform.asyncio import AsyncIOMainLoop
+AsyncIOMainLoop().install()
 
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
@@ -50,22 +52,18 @@ async def on_message(message):
     if "soduv" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
         await discordclient.send_message(message.channel, message.author.mention+": "+pullcard(message.content))
 
-discordclient.run(clientdata["token"])
-
 
 # IRC
 
-ircclient = irc.connect("irc.us.geo.sorcery.net", 6667)
-ircclient.register("Soduv", "Soduv", "Soduv")
-ircclient.join(["#/div/ination"]) 
+# Simple echo bot.
+class IRCSoduv(pydle.Client):
+    def on_connect(self):
+         self.join('#/div/ination')
 
-@ircclient.on("message")
-def incoming_message(parsed, user, target, text):
-    print(text)
-    # parsed is an RFC1459Message object
-    # user is a User object with nick, user, and host attributes
-    # target is a string representing nick/channel the message was sent to
-    # text is the text of the message
-    if "soduv" in text.lower() or target == user.nick:
-        bot.say(target, user.nick+": "+pullcard(text))
+    def on_message(self, source, target, message):
+         if "soduv" in message.lower() or target == source:
+            self.message(source, target+": "+pullcard(message))
 
+ircclient = IRCSoduv('Soduv', realname='Soduv')
+ircclient.connect('irc.us.sorcery.net', 6667)
+discordclient.run(clientdata["token"])
