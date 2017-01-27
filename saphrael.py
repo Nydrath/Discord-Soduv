@@ -4,6 +4,7 @@ import pydle
 import asyncio
 import decks
 import random
+import randomorg
 from tornado.platform.asyncio import AsyncIOMainLoop
 AsyncIOMainLoop().install()
 
@@ -31,13 +32,18 @@ with open("client_data.json", "r") as f:
                                                                                                                                                                                                        
 
 def pullcard(message):
-    if "rw" in message:
+    if "trng" in message.lower():
+#        try:
+            random.seed(randomorg.rrandom())
+#        except:
+#            return ["The maximum number of true random queries for the day has been exceeded", ""]
+    if "rw" in message.lower():
         deck = decks.RW_DECK
-    elif "rune" in message:
+    elif "rune" in message.lower():
         deck = decks.RUNES
     else:
         deck = decks.THOTH
-    if "spread" in message:
+    if "spread" in message.lower():
         return random.sample(deck, 3)
     else:
         return [random.choice(deck)]
