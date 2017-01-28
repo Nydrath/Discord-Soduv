@@ -57,7 +57,10 @@ discordclient = discord.Client()
 @asyncio.coroutine
 def on_message(message):
     if "saphrael" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
-        yield from discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
+        try:
+            yield from discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
+        except discord.errors.Forbidden:
+            pass
 
 
 # IRC
