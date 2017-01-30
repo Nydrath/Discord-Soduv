@@ -70,9 +70,12 @@ class IRCSoduv(pydle.Client):
     def on_connect(self):
          self.join('#/div/ination')
 
-    def on_message(self, source, target, message):
-         if "saphrael" in message.lower() or target == source:
-            self.message(source, target+": "+" ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
+    def on_channel_message(self, channel, nick, message):
+         if "saphrael" in message.lower():
+            self.message(channel, nick+": "+" ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
+
+    def on_private_message(self, nick, message):
+        self.message(nick, " ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
 
 ircclient = IRCSoduv('Saphrael', realname='Saphrael')
 ircclient.connect('irc.us.sorcery.net', 6667)
