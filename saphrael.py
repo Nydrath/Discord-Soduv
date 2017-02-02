@@ -5,13 +5,20 @@ import asyncio
 import decks
 import random
 import randomorg
+from imgurpython import ImgurClient
+from PIL import Image
+import os
 from tornado.platform.asyncio import AsyncIOMainLoop
 AsyncIOMainLoop().install()
 
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
 
-                                                                                                                                                                                                        
+global imgurclient
+imgurclient = ImgurClient(clientdata["imgurid"], clientdata["imgursecret"])
+global imagenamecounter
+imagenamecounter = 0
+
 #         O. ,8.     ~N. +:     .D: Z$ .N= 7N                .N  $D   .ZI    ID:  .Z, :I.               .8, ,D.          +=..7:               .?~ .D,  .OMO:         :7..N~               ,8?OM.        
 #         N  .I.     ?D  ,?.    .7. =D .O. ,N                .Z  :N  .MI      IM. ,N  .MMMMMMMMMMMMMMM, ,?.  NIZMM,      $.  ,+               .Z.  N=  Z, .Z.        +:  OI               Z$  =~        
 #         .DM$,       .DM?       ,IM:   :8MMD                .MMM7. .$:        =+  .NMN.    =M.     .Z,  +NMN.    :MI     8MMM:               .+DMM.   O, .$.         7MM,               ,MM~IM.        
@@ -37,6 +44,8 @@ def pullcard(message):
             random.seed(randomorg.rrandom())
 #        except:
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
+    if "celtic cross" in message.lower():
+        return ["Cast cards: ", celticcross()]
     if "rw" in message.lower():
         deck = decks.RW_DECK
     elif "rune" in message.lower():
@@ -79,4 +88,39 @@ class IRCSoduv(pydle.Client):
 
 ircclient = IRCSoduv('Saphrael', realname='Saphrael')
 ircclient.connect('irc.us.sorcery.net', 6667)
+
+
+# Celtic cross spread
+
+def celticcross():
+    cardwidth = 280
+    cardheight = 417
+    horizontalspace = 10
+    verticalspace = 10
+
+    squaresize = cardwidth*2 + cardheight + horizontalspace*4
+    maxheight = cardheight*4 + verticalspace*5
+    squareheight = (maxheight - squaresize)/2
+
+    image = Image.new("RGB", (squaresize + cardwidth + horizontalspace, maxheight), color=(0, 0, 0))
+
+    cards = [Image.open("thoth/{}.jpg".format(random.randint(1, len(decks.THOTH)))) for i in range(10)]
+
+    image.paste(cards[0], (int(squaresize/2-cardwidth/2), int(maxheight/2-cardheight/2)))
+    image.paste(cards[1].rotate(90, expand=True), (int(squaresize/2-cardheight/2), int(maxheight/2-cardwidth/2)))
+    image.paste(cards[2], (int(squaresize/2-cardwidth/2), int(maxheight-squareheight-cardheight/2)))
+    image.paste(cards[3], (int(horizontalspace), int(maxheight/2-cardheight/2)))
+    image.paste(cards[4], (int(squaresize/2-cardwidth/2), int(squareheight-cardheight/2)))
+    image.paste(cards[5], (int(squaresize-horizontalspace-cardwidth), int(maxheight/2-cardheight/2)))
+
+    for i in range(4):
+        image.paste(cards[6+i], (int(squaresize), int(verticalspace + i*(cardheight+verticalspace))))
+
+    image.save("{}.png".format(imagenamecounter))
+    upload = imgurclient.upload_from_path(os.getcwd()+"/{}.png".format(imagenamecounter))
+    imagenamecounter += 1
+    os.remove(os.getcwd()+"/{}.png".format(imagenamecounter))
+    return upload["link"]
+
+
 discordclient.run(clientdata["token"])
