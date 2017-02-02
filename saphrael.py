@@ -5,7 +5,7 @@ import asyncio
 import decks
 import random
 import randomorg
-from imgurpython import ImgurClient
+import pyimgur
 from PIL import Image
 import os
 from tornado.platform.asyncio import AsyncIOMainLoop
@@ -14,9 +14,6 @@ AsyncIOMainLoop().install()
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
 
-global imgurclient
-imgurclient = ImgurClient(clientdata["imgurid"], clientdata["imgursecret"])
-global imagenamecounter
 imagenamecounter = 0
 
 #         O. ,8.     ~N. +:     .D: Z$ .N= 7N                .N  $D   .ZI    ID:  .Z, :I.               .8, ,D.          +=..7:               .?~ .D,  .OMO:         :7..N~               ,8?OM.        
@@ -45,7 +42,7 @@ def pullcard(message):
 #        except:
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
     if "celtic cross" in message.lower():
-        return ["Cast cards: ", celticcross()]
+        return [["Cast cards: ", celticcross()]]
     if "rw" in message.lower():
         deck = decks.RW_DECK
     elif "rune" in message.lower():
@@ -104,7 +101,8 @@ def celticcross():
 
     image = Image.new("RGB", (squaresize + cardwidth + horizontalspace, maxheight), color=(0, 0, 0))
 
-    cards = [Image.open("thoth/{}.jpg".format(random.randint(1, len(decks.THOTH)))) for i in range(10)]
+    cardfiles = ["thoth/{}.jpg".format(c) for c in random.sample(range(1, len(decks.THOTH)), 10)]
+    cards = [Image.open(c) for c in cardfiles]
 
     image.paste(cards[0], (int(squaresize/2-cardwidth/2), int(maxheight/2-cardheight/2)))
     image.paste(cards[1].rotate(90, expand=True), (int(squaresize/2-cardheight/2), int(maxheight/2-cardwidth/2)))
@@ -116,11 +114,13 @@ def celticcross():
     for i in range(4):
         image.paste(cards[6+i], (int(squaresize), int(verticalspace + i*(cardheight+verticalspace))))
 
+    global imagenamecounter
     image.save("{}.png".format(imagenamecounter))
-    upload = imgurclient.upload_from_path(os.getcwd()+"/{}.png".format(imagenamecounter))
-    imagenamecounter += 1
+    imgurclient = pyimgur.Imgur(clientdata["imgurid"])
+    upload = imgurclient.upload_image(os.getcwd()+"/{}.png".format(imagenamecounter))
     os.remove(os.getcwd()+"/{}.png".format(imagenamecounter))
-    return upload["link"]
+    imagenamecounter += 1
+    return upload.link
 
 
 discordclient.run(clientdata["token"])
