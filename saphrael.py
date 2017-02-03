@@ -6,6 +6,8 @@ import decks
 import random
 import randomorg
 import pyimgur
+import gizeh
+import math
 from PIL import Image
 import os
 from tornado.platform.asyncio import AsyncIOMainLoop
@@ -41,6 +43,8 @@ def pullcard(message):
             random.seed(randomorg.rrandom())
 #        except:
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
+    if "sigilize" in message.lower():
+        return [["Finished sigil: ", drawsigil()]]
     if "celtic cross" in message.lower():
         return [["Cast cards: ", celticcross()]]
     if "rw" in message.lower():
@@ -122,5 +126,55 @@ def celticcross():
     imagenamecounter += 1
     return upload.link
 
+
+def drawsigil():
+    IMAGE_SIZE = 400
+    IMAGE_BORDER = 200
+    CURVE_CHANCE = 7
+
+    surface = gizeh.Surface(width=IMAGE_SIZE+IMAGE_BORDER*2, height=IMAGE_SIZE+IMAGE_BORDER*2, bg_color=(1, 1, 1))
+
+    g = gizeh.Group([])
+    line = []
+    size = random.randint(15, 20)
+    for i in range(2, size):
+        x = random.randint(1, int(math.sqrt(i-1)))*IMAGE_SIZE/int(math.sqrt(i)+1)
+        y = random.randint(1, int(math.sqrt(i-1)))*IMAGE_SIZE/int(math.sqrt(i)+1)
+
+        # If now is the time for an arc
+        if random.randint(1, CURVE_CHANCE) == 2 and i>2 and not (old_x == x and old_y == y):
+            # Finish the previous linegroup
+            prevline = gizeh.polyline(line, stroke_width=5)
+            line = []
+
+            vx, vy = x-old_x, y-old_y
+            distance = math.hypot(vx, vy)
+            radius = distance*(random.random()/2 + 0.5)
+            mid_x, mid_y = old_x+vx/2, old_y+vy/2
+            sgn = random.choice([1, -1])
+            # 90 degrees rotated, direction random
+            hvx, hvy = -vy*sgn, vx*sgn
+            hlength = math.sqrt(radius**2 - (distance/2)**2)
+            f = hlength/distance
+            center_x, center_y = mid_x+f*hvx, mid_y+f*hvy
+
+            arc = gizeh.arc(radius, math.atan2(old_y-center_y, old_x-center_x), math.atan2(y-center_y, x-center_x), xy=[center_x+IMAGE_BORDER, center_y+IMAGE_BORDER], stroke_width=5)
+            g = gizeh.Group([g, prevline, arc])
+            
+        line.append([x+IMAGE_BORDER, y+IMAGE_BORDER])
+        old_x, old_y = x, y
+
+    p = gizeh.polyline(line, stroke_width=5)
+    g = gizeh.Group([g, p])
+
+    g.draw(surface)
+
+    global imagenamecounter
+    surface.write_to_png("{}.png".format(imagenamecounter))
+    imgurclient = pyimgur.Imgur(clientdata["imgurid"])
+    upload = imgurclient.upload_image(os.getcwd()+"/{}.png".format(imagenamecounter))
+    os.remove(os.getcwd()+"/{}.png".format(imagenamecounter))
+    imagenamecounter += 1
+    return upload.link
 
 discordclient.run(clientdata["token"])
