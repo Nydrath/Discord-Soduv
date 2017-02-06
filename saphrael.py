@@ -66,7 +66,7 @@ discordclient = discord.Client()
 @discordclient.event
 @asyncio.coroutine
 def on_message(message):
-    if "saphrael" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
+    if "saph" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
         try:
             yield from discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
         except discord.errors.Forbidden:
@@ -81,7 +81,7 @@ class IRCSoduv(pydle.Client):
          self.join('#/div/ination')
 
     def on_channel_message(self, channel, nick, message):
-         if "saphrael" in message.lower():
+         if "saph" in message.lower():
             self.message(channel, nick+": "+" ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
 
     def on_private_message(self, nick, message):
