@@ -1,4 +1,3 @@
 pydle
-gizeh
 pyimgur
 discord.io
