@@ -42,8 +42,8 @@ def pullcard(message):
             random.seed(randomorg.rrandom())
 #        except:
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
-    if "sigilize" in message.lower():
-        return [["Finished sigil: ", drawsigil()]]
+#    if "sigilize" in message.lower():
+#        return [["Finished sigil: ", drawsigil()]]
     if "celtic cross" in message.lower():
         return [["Cast cards: ", celticcross()]]
     if "rw" in message.lower():
