@@ -45,7 +45,7 @@ def pullcard(message):
 #    if "sigilize" in message.lower():
 #        return [["Finished sigil: ", drawsigil()]]
     if "celtic cross" in message.lower():
-        return [["Cast cards: ", celticcross()]]
+        return [["Cast cards: ", celticcross()], ["Meanings: ", "http://goo.gl/oOL9aR"]]
     if "rw" in message.lower():
         deck = decks.RW_DECK
     elif "rune" in message.lower():
