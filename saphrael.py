@@ -52,6 +52,8 @@ def pullcard(message):
         deck = decks.RUNES
     else:
         deck = decks.THOTH
+    if "p/n" in message.lower():
+        return random.sample(deck, 2)
     if "spread" in message.lower():
         return random.sample(deck, 3)
     else:
