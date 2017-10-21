@@ -15,9 +15,9 @@ AsyncIOMainLoop().install()
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
 
-global worddict
-with open("words_dictionary.json", "r") as f:
-    worddict = json.load(f)
+global wordlist
+with open("words", "r") as f:
+    wordlist = f.read().split("\n")
 
 imagenamecounter = 0
 
@@ -49,11 +49,10 @@ def pullcard(message):
 #    if "sigilize" in message.lower():
 #        return [["Finished sigil: ", drawsigil()]]
     if "words" in message.lower():
-        nwords = random.random(1, 5)
-        sentence = " ".join(random.choices(worddict.keys(), k=nwords))
-        sentence.capitalize()
+        nwords = random.randint(1, 5)
+        sentence = " ".join([random.choice(wordlist) for n in range(nwords)]).capitalize()
         sentence += "."
-        return sentence
+        return [[sentence]]
     if "celtic cross" in message.lower():
         return [["Cast cards: ", celticcross()], ["Meanings: ", "https://goo.gl/ZEwmwd"]]
     if "rw" in message.lower():
@@ -83,7 +82,12 @@ def on_message(message):
             import sys
             sys.exit(0)
         try:
-            yield from discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
+            answer = message.author.mention+":"
+            for card in pullcard(message.content):
+                answer += " " + card[0]
+                if len(card) > 1:
+                    answer += " <"+card[1]+">"
+            yield from discordclient.send_message(message.channel, answer)
         except discord.errors.Forbidden:
             pass
 
@@ -93,11 +97,17 @@ def on_message(message):
 # Simple echo bot.
 class IRCSoduv(pydle.Client):
     def on_connect(self):
-         self.join('#/div/ination')
+         #self.join('#/div/ination')
+        self.join('#saphraeltest')
 
     def on_channel_message(self, channel, nick, message):
          if "saph" in message.lower():
-            self.message(channel, nick+": "+" ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
+            answer = nick+":"
+            for card in pullcard(message):
+                answer += " " + card[0]
+                if len(card) > 1:
+                    answer += " { "+card[1]+" }"
+            self.message(channel, answer)
 
     def on_private_message(self, nick, message):
         self.message(nick, " ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
