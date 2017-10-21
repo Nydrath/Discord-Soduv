@@ -78,6 +78,10 @@ discordclient = discord.Client()
 @asyncio.coroutine
 def on_message(message):
     if "saph" in message.content.lower() or discordclient.user.mention in message.content or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
+        if message.content == "Saphrael shut down" and discordclient.user.id == "120342047109545984":
+            print("Shutting down by remote command")
+            import sys
+            sys.exit(0)
         try:
             yield from discordclient.send_message(message.channel, message.author.mention+": "+" ".join([card[0]+" <"+card[1]+">" for card in pullcard(message.content)]))
         except discord.errors.Forbidden:
