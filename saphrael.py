@@ -55,7 +55,7 @@ def pullcard(message):
         sentence += "."
         return sentence
     if "celtic cross" in message.lower():
-        return [["Cast cards: ", celticcross()], ["Meanings: ", "http://goo.gl/oOL9aR"]]
+        return [["Cast cards: ", celticcross()], ["Meanings: ", "https://goo.gl/ZEwmwd"]]
     if "rw" in message.lower():
         deck = decks.RW_DECK
     elif "rune" in message.lower():
