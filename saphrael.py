@@ -15,6 +15,10 @@ AsyncIOMainLoop().install()
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
 
+global worddict
+with open("words_dictionary.json", "r") as f:
+    worddict = json.load(f)
+
 imagenamecounter = 0
 
 #         O. ,8.     ~N. +:     .D: Z$ .N= 7N                .N  $D   .ZI    ID:  .Z, :I.               .8, ,D.          +=..7:               .?~ .D,  .OMO:         :7..N~               ,8?OM.        
@@ -44,6 +48,12 @@ def pullcard(message):
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
 #    if "sigilize" in message.lower():
 #        return [["Finished sigil: ", drawsigil()]]
+    if "words" in message.lower():
+        nwords = random.random(1, 5)
+        sentence = " ".join(random.choices(worddict.keys(), k=nwords))
+        sentence.capitalize()
+        sentence += "."
+        return sentence
     if "celtic cross" in message.lower():
         return [["Cast cards: ", celticcross()], ["Meanings: ", "http://goo.gl/oOL9aR"]]
     if "rw" in message.lower():
