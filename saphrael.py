@@ -110,7 +110,12 @@ class IRCSoduv(pydle.Client):
             self.message(channel, answer)
 
     def on_private_message(self, nick, message):
-        self.message(nick, " ".join([card[0]+" { "+card[1]+" }" for card in pullcard(message)]))
+        answer = nick+":"
+        for card in pullcard(message):
+            answer += " " + card[0]
+            if len(card) > 1:
+                answer += " { "+card[1]+" }"
+        self.message(nick, answer)
 
 ircclient = IRCSoduv('Saphrael', realname='Saphrael')
 ircclient.connect('irc.us.sorcery.net', 6667)
