@@ -97,8 +97,7 @@ def on_message(message):
 # Simple echo bot.
 class IRCSoduv(pydle.Client):
     def on_connect(self):
-         #self.join('#/div/ination')
-        self.join('#saphraeltest')
+         self.join('#/div/ination')
 
     def on_channel_message(self, channel, nick, message):
          if "saph" in message.lower():
