@@ -160,28 +160,3 @@ RW_DECK = [ ["0 - The Fool", "http://i.imgur.com/xwIpqIC.jpg"],
             ["Knight of Pentacles", "http://i.imgur.com/p1291Jn.jpg"],
             ["Page of Pentacles", "http://i.imgur.com/xxPXOML.jpg"]
 ]
-
-
-# Album: http://imgur.com/a/ov9F7
-RUNES = [   ["Fa", "http://i.imgur.com/C6Tocr3.png"],
-            ["Ur", "http://i.imgur.com/ljGw0TR.png"],
-            ["Thorn", "http://i.imgur.com/N3golcE.png"],
-            ["Os", "http://i.imgur.com/GhEnMbV.png"],
-            ["Rit", "http://i.imgur.com/5egR6IG.png"],
-            ["Ken", "http://i.imgur.com/bMxfave.png"],
-            ["Ka", "http://i.imgur.com/rtEZJXg.png"],
-            ["Hagal", "http://i.imgur.com/NHLDcY3.png"],
-            ["Not", "http://i.imgur.com/hFMGUx8.png"],
-            ["Is", "http://i.imgur.com/qrMejoV.png"],
-            ["Jera", "http://i.imgur.com/pwXXix1.png"],
-            ["Gebo", "http://i.imgur.com/i75SmSj.png"],
-            ["Ar", "http://i.imgur.com/e7wTYRP.png"],
-            ["Sig", "http://i.imgur.com/CS3pZaO.png"],
-            ["Tyr", "http://i.imgur.com/IMlzA1w.png"],
-            ["Bar", "http://i.imgur.com/ZWVDQLF.png"],
-            ["Laf", "http://i.imgur.com/pVshTXd.png"],
-            ["Man", "http://i.imgur.com/kXRouCV.png"],
-            ["Yr", "http://i.imgur.com/WOB63Bb.png"],
-            ["Eh", "http://i.imgur.com/HZqlRIa.png"],
-            ["Vor", "http://i.imgur.com/TypK56N.png"]
-]
