@@ -57,8 +57,6 @@ def pullcard(message):
         return [["Cast cards: ", celticcross()], ["Meanings: ", "https://goo.gl/ZEwmwd"]]
     if "rw" in message.lower():
         deck = decks.RW_DECK
-    elif "rune" in message.lower():
-        deck = decks.RUNES
     else:
         deck = decks.THOTH
     if "p/n" in message.lower():
