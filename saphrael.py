@@ -94,7 +94,6 @@ def on_message(message):
 
 # IRC
 
-# Simple echo bot.
 class IRCSoduv(pydle.Client):
     def on_connect(self):
          self.join('#/div/ination')
