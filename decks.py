@@ -163,7 +163,7 @@ RW_DECK = [ ["0 - The Fool", "http://i.imgur.com/xwIpqIC.jpg"],
 
 # Album: https://imgur.com/a/9N1NX
 HAINDL = [ ["0 - The Fool: Act impulsively, follow your feelings, surprise, wonder, excitement, take opportunities that arise.", "https://i.imgur.com/rn87y8T.jpg"],
-                ["I - The Magician: Power, Strength, Being in control of one's life. Transforming old situations, bringing in new ones. A burst of energy, Creativity, Focused Will.", "https://i.imgur.com/CgkGRCJ.jpg"],
+                ["I - The Magician: Power, Strength, Being in control of one's life. Transforming old situations, bringing in new ones. A burst of energy, creativity, focused will.", "https://i.imgur.com/CgkGRCJ.jpg"],
                 ["II - The High Priestess: A time for quiet, for looking inward. Seek peace. Use intuition and feeling. Peace and joy. Possibly, a lover who needs solitude or is avoiding commitment.", "https://i.imgur.com/N7xN0Ne.jpg"],
                 ["III - The Empress: Passion, Love of nature, Motherhood. Joyous Activity.", "https://i.imgur.com/gBWJgns.jpg"],
                 ["IV - The Emperor: Influence of Society, law. Resurgence of energy. Sexual potency. Arrogance. Insensitivity. Energy and Desire.", "https://i.imgur.com/6K4M84N.jpg"],
@@ -307,7 +307,7 @@ HAINDL = [ ["0 - The Fool: Act impulsively, follow your feelings, surprise, wond
                 ["[REVERSED] Ace of Stones in the West: Unappreciated gifts. Materialism. Conflicts over money or property.", "https://i.imgur.com/k14Tt2y.jpg"],
                 ["[REVERSED] 2 of Stones - Harmony: Disharmony. A time for solitude.", "https://i.imgur.com/ZlGDL0O.jpg"],
                 ["[REVERSED] 3 of Stones - Work: Work not going well. Unemployment. Laziness.", "https://i.imgur.com/MtCBamG.jpg"],
-                ["[REVERSED] 4 of Stones - The Power of the Earth: CLosing a sense of place. Fear.", "https://i.imgur.com/yp4oZuk.jpg"],
+                ["[REVERSED] 4 of Stones - The Power of the Earth: Closing a sense of place. Fear.", "https://i.imgur.com/yp4oZuk.jpg"],
                 ["[REVERSED] 5 of Stones - Material Difficulty: Movement for the better. Wait, act cautiously.", "https://i.imgur.com/8pr4ESK.jpg"],
                 ["[REVERSED] 6 of Stones - Success: Moment beginning to end. Save or invest money carefully during prosperity.", "https://i.imgur.com/PPETHib.jpg"],
                 ["[REVERSED] 7 of Stones - Failure: Recovery. Fresh Start.", "https://i.imgur.com/7IFLca8.jpg"],
