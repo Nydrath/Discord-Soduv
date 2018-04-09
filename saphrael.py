@@ -75,7 +75,7 @@ discordclient = discord.Client()
 @asyncio.coroutine
 def on_message(message):
     if "saph" in message.content.lower() or discordclient.user.mentioned_in(message=message) or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
-        if message.content == "Saphrael shut down" and discordclient.user.id == "120342047109545984":
+        if message.content == "Saphrael shut down" and discordclient.user.id.strip("!") == "120342047109545984":
             print("Shutting down by remote command")
             import sys
             sys.exit(0)
