@@ -48,7 +48,7 @@ def pullcard(message):
 #            return ["The maximum number of true random queries for the day has been exceeded", ""]
 #    if "sigilize" in message.lower():
 #        return [["Finished sigil: ", drawsigil()]]
-    if "words" in message.lower():
+    if "words" in message.lower().replace("swords", ""):
         nwords = random.randint(1, 5)
         sentence = " ".join([random.choice(wordlist) for n in range(nwords)]).capitalize()
         sentence += "."
