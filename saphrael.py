@@ -1,5 +1,4 @@
 import json
-import discord
 import pydle
 import asyncio
 import decks
