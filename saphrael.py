@@ -104,25 +104,25 @@ def pullcard(message):
 # IRC
 
 class IRCSoduv(pydle.Client):
-    def on_connect(self):
-         self.join('#/div/ination')
+    async def on_connect(self):
+         await self.join('#/div/ination')
 
-    def on_channel_message(self, channel, nick, message):
+    async def on_channel_message(self, channel, nick, message):
          if "saph" in message.lower():
             answer = nick+":"
             for card in pullcard(message):
                 answer += " " + card[0]
                 if len(card) > 1:
                     answer += " { "+card[1]+" }"
-            self.message(channel, answer)
+            await self.message(channel, answer)
 
-    def on_private_message(self, nick, message):
+    async def on_private_message(self, nick, message):
         answer = nick+":"
         for card in pullcard(message):
             answer += " " + card[0]
             if len(card) > 1:
                 answer += " { "+card[1]+" }"
-        self.message(nick, answer)
+        await self.message(nick, answer)
 
 ircclient = IRCSoduv('Saphrael', realname='Saphrael')
 ircclient.run('irc.us.sorcery.net', 6667)
