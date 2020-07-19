@@ -9,8 +9,6 @@ import pyimgur
 import math
 from PIL import Image
 import os
-from tornado.platform.asyncio import AsyncIOMainLoop
-AsyncIOMainLoop().install()
 
 with open("client_data.json", "r") as f:
     clientdata = json.load(f)
@@ -39,85 +37,6 @@ imagenamecounter = 0
 #               .?MN.  +M   IM8       ,D. .D,               .$.  N+     Z.  :~              =M.     .Z,              =M.,?  ?D                $O  :+    ?M?.     .+M.             .7. .N                
 #                   ,ZDMMN$=           .OMO.                  7MD.       7ND+               =M.     .Z,              =M. ~MM:.                 ,NM+       .+NMM8$.                 :ZMO.                
                                                                                                                                                                                                        
-
-def pullcard(message):
-    if "trng" in message.lower():
-#        try:
-            random.seed(randomorg.rrandom())
-#        except:
-#            return ["The maximum number of true random queries for the day has been exceeded", ""]
-#    if "sigilize" in message.lower():
-#        return [["Finished sigil: ", drawsigil()]]
-    if "words" in message.lower():
-        nwords = random.randint(1, 5)
-        sentence = " ".join([random.choice(wordlist) for n in range(nwords)]).capitalize()
-        sentence += "."
-        return [[sentence]]
-    if "celtic cross" in message.lower():
-        return [["Cast cards: ", celticcross()], ["Meanings: ", "https://goo.gl/ZEwmwd"]]
-    if "haindl" in message.lower():
-        deck = decks.HAINDL
-    elif "rw" in message.lower():
-        deck = decks.RW_DECK
-    else:
-        deck = decks.THOTH
-    if "p/n" in message.lower():
-        return random.sample(deck, 2)
-    if "spread" in message.lower():
-        return random.sample(deck, 3)
-    else:
-        return [random.choice(deck)]
-
-
-# Discord
-
-discordclient = discord.Client()
-
-@discordclient.event
-@asyncio.coroutine
-def on_message(message):
-    if "saph" in message.content.lower() or discordclient.user.mentioned_in(message=message) or isinstance(message.channel, discord.PrivateChannel) and not message.author.bot:
-        if message.content == "Saphrael shut down" and discordclient.user.id.strip("!") == "120342047109545984":
-            print("Shutting down by remote command")
-            import sys
-            sys.exit(0)
-        try:
-            answer = message.author.mention+":"
-            for card in pullcard(message.content):
-                answer += " " + card[0]
-                if len(card) > 1:
-                    answer += " <"+card[1]+">"
-            yield from discordclient.send_message(message.channel, answer)
-        except discord.errors.Forbidden:
-            pass
-
-
-# IRC
-
-class IRCSoduv(pydle.Client):
-    def on_connect(self):
-         self.join('#/div/ination')
-
-    def on_channel_message(self, channel, nick, message):
-         if "saph" in message.lower():
-            answer = nick+":"
-            for card in pullcard(message):
-                answer += " " + card[0]
-                if len(card) > 1:
-                    answer += " { "+card[1]+" }"
-            self.message(channel, answer)
-
-    def on_private_message(self, nick, message):
-        answer = nick+":"
-        for card in pullcard(message):
-            answer += " " + card[0]
-            if len(card) > 1:
-                answer += " { "+card[1]+" }"
-        self.message(nick, answer)
-
-ircclient = IRCSoduv('Saphrael', realname='Saphrael')
-ircclient.connect('irc.us.sorcery.net', 6667)
-
 
 # Celtic cross spread
 
@@ -154,4 +73,57 @@ def celticcross():
     imagenamecounter += 1
     return upload.link
 
-discordclient.run(clientdata["token"])
+def pullcard(message):
+    if "trng" in message.lower():
+#        try:
+            random.seed(randomorg.rrandom())
+#        except:
+#            return ["The maximum number of true random queries for the day has been exceeded", ""]
+#    if "sigilize" in message.lower():
+#        return [["Finished sigil: ", drawsigil()]]
+    if "words" in message.lower():
+        nwords = random.randint(1, 5)
+        sentence = " ".join([random.choice(wordlist) for n in range(nwords)]).capitalize()
+        sentence += "."
+        return [[sentence]]
+    if "celtic cross" in message.lower():
+        return [["Cast cards: ", celticcross()], ["Meanings: ", "https://goo.gl/ZEwmwd"]]
+    if "haindl" in message.lower():
+        deck = decks.HAINDL
+    elif "rw" in message.lower():
+        deck = decks.RW_DECK
+    else:
+        deck = decks.THOTH
+    if "p/n" in message.lower():
+        return random.sample(deck, 2)
+    if "spread" in message.lower():
+        return random.sample(deck, 3)
+    else:
+        return [random.choice(deck)]
+
+
+# IRC
+
+class IRCSoduv(pydle.Client):
+    def on_connect(self):
+         self.join('#/div/ination')
+
+    def on_channel_message(self, channel, nick, message):
+         if "saph" in message.lower():
+            answer = nick+":"
+            for card in pullcard(message):
+                answer += " " + card[0]
+                if len(card) > 1:
+                    answer += " { "+card[1]+" }"
+            self.message(channel, answer)
+
+    def on_private_message(self, nick, message):
+        answer = nick+":"
+        for card in pullcard(message):
+            answer += " " + card[0]
+            if len(card) > 1:
+                answer += " { "+card[1]+" }"
+        self.message(nick, answer)
+
+ircclient = IRCSoduv('Saphrael', realname='Saphrael')
+ircclient.run('irc.us.sorcery.net', 6667)
