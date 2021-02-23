@@ -101,6 +101,9 @@ class BaseRead:
     if containsflag(query, "celtic cross"):
       self.gen_celticcross(user)
       return
+    if containsflag(query, "yes/no"):
+      self.gen_binary(user)
+      return
 
     if containsflag(query, "haindl"):
       deck = decks.HAINDL
@@ -120,6 +123,9 @@ class BaseRead:
     nwords = random.randint(1, 5)
     self.text = " ".join([random.choice(wordlist) for n in range(nwords)]).capitalize()
     self.text += "."
+
+  def gen_binary(self, user):
+    self.text = random.choices(['Yes', 'No', 'Maybe'], weights=[3, 3, 2])[0]
 
   def gen_single(self, deck): pass
   def gen_spread(self, deck): pass
