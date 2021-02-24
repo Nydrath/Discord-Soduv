@@ -474,6 +474,7 @@ HAINDL = [
     "https://i.imgur.com/6A2TrTw.jpg"]
 ]
 
+# Album: https://imgur.com/a/VyoLxm6
 SERVANTS_DECK = [['The Adventurer', 'https://i.imgur.com/CWUYciU.jpg'],
                  ['The Balancer', 'https://i.imgur.com/YmI8XQw.jpg'],
                  ['The Carnal', 'https://i.imgur.com/ivezZGX.jpg'],
