@@ -109,6 +109,8 @@ class BaseRead:
       deck = decks.HAINDL
     elif containsflag(query, "rw"):
       deck = decks.RW_DECK
+    elif containsflag(query, "servants"):
+      deck = decks.SERVANTS_DECK
     else:
       deck = decks.THOTH
 
