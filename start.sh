@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python saphrael.py &> errors
+python3 saphrael.py &> errors
