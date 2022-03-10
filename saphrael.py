@@ -202,8 +202,17 @@ class DiscordClient(discord.Client):
         pass
 
 class IRCClient(pydle.Client):
+  def __init__(self, reset_function):
+    super(IRCClient, self).__init__(nickname='Saphrael', realname='Saphrael')
+    self.RECONNECT_MAX_ATTEMPTS = None
+    self.reset_function = reset_function
+
   async def on_connect(self):
     await self.join('#/div/ination')
+
+  async def on_data_error(self, exception):
+    super(IRCClient, self).on_data_error(exception)
+    self.reset_function(self)
 
   async def on_channel_message(self, channel, nick, message):
     if "saph" in message.lower():
@@ -215,11 +224,15 @@ class IRCClient(pydle.Client):
       read = IRCRead(message, nick)
       await self.message(nick, read.render(nick, noprefix=True))
 
-discordclient = DiscordClient()
-ircclient = IRCClient('Saphrael', realname='Saphrael')
-
 loop = asyncio.get_event_loop()
-asyncio.ensure_future(ircclient.connect('irc.us.sorcery.net', 6667), loop=loop)
+discordclient = DiscordClient()
+
+def reset_function(client):
+  asyncio.ensure_future(client.connect('irc.us.sorcery.net', 6667), loop=loop)
+
+ircclient = IRCClient(reset_function)
+
+reset_function(ircclient)
 asyncio.ensure_future(discordclient.start(clientdata["token"]), loop=loop)
 try:
   loop.run_forever()
