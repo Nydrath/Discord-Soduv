@@ -111,6 +111,8 @@ class BaseRead:
       deck = decks.RW_DECK
     elif containsflag(query, "servants"):
       deck = decks.SERVANTS_DECK
+    elif containsflag(query, "rune"):
+      deck = decks.ELDER_FUTHARK
     else:
       deck = decks.THOTH
 
