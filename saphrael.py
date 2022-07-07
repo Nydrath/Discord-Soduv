@@ -213,7 +213,7 @@ class IRCClient(pydle.Client):
     await self.join('#/div/ination')
 
   async def on_data_error(self, exception):
-    super(IRCClient, self).on_data_error(exception)
+    await super(IRCClient, self).on_data_error(exception)
     self.reset_function(self)
 
   async def on_channel_message(self, channel, nick, message):
