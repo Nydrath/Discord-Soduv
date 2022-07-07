@@ -226,19 +226,20 @@ class IRCClient(pydle.Client):
       read = IRCRead(message, nick)
       await self.message(nick, read.render(nick, noprefix=True))
 
-loop = asyncio.get_event_loop()
+#loop = asyncio.get_event_loop()
 discordclient = DiscordClient()
+discordclient.run(clientdata["token"])
 
-def reset_function(client):
-  asyncio.ensure_future(client.connect('irc.us.sorcery.net', 6667), loop=loop)
+#def reset_function(client):
+#  asyncio.ensure_future(client.connect('irc.us.sorcery.net', 6667), loop=loop)
 
-ircclient = IRCClient(reset_function)
+#ircclient = IRCClient(reset_function)
 
-reset_function(ircclient)
-asyncio.ensure_future(discordclient.start(clientdata["token"]), loop=loop)
-try:
-  loop.run_forever()
-except KeyboardInterrupt:
-  loop.run_until_complete(discordclient.logout())
-finally:
-  loop.close()
+#reset_function(ircclient)
+#asyncio.ensure_future(discordclient.start(clientdata["token"]), loop=loop)
+#try:
+#  loop.run_forever()
+#except KeyboardInterrupt:
+#  loop.run_until_complete(discordclient.logout())
+#finally:
+#  loop.close()
