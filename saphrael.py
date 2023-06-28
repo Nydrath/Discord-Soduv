@@ -227,7 +227,10 @@ class IRCClient(pydle.Client):
       await self.message(nick, read.render(nick, noprefix=True))
 
 #loop = asyncio.get_event_loop()
-discordclient = DiscordClient()
+
+intents = discord.Intents.default()
+intents.message_content = True
+discordclient = DiscordClient(intents=intents)
 discordclient.run(keys["token"])
 
 #def reset_function(client):
