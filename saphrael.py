@@ -9,8 +9,8 @@ from PIL import Image
 import os
 import asyncio
 
-with open("client_data.json", "r") as f:
-  clientdata = json.load(f)
+with open("keys.json", "r") as f:
+  keys = json.load(f)
 
 global wordlist
 with open("words", "r") as f:
@@ -72,7 +72,7 @@ def load_discord_image(filename):
 
 
 def load_irc_image(filename):
-  imgurclient = pyimgur.Imgur(clientdata["imgurid"])
+  imgurclient = pyimgur.Imgur(keys["imgurid"])
   upload = imgurclient.upload_image(os.path.join(os.getcwd(), filename))
   return upload.link
 
@@ -148,7 +148,7 @@ class IRCRead(BaseRead):
 
   def gen_celticcross(self, user):
     filename = render_celticcross(random.choices(string.ascii_uppercase, k=10))
-    imgurclient = pyimgur.Imgur(clientdata["imgurid"])
+    imgurclient = pyimgur.Imgur(keys["imgurid"])
     upload = imgurclient.upload_image(os.path.join(os.getcwd(), filename))
     self.text = "Cast cards: {0} (Meanings: https://goo.gl/ZEwmwd )".format(upload.link)
     os.remove(filename)
@@ -228,7 +228,7 @@ class IRCClient(pydle.Client):
 
 #loop = asyncio.get_event_loop()
 discordclient = DiscordClient()
-discordclient.run(clientdata["token"])
+discordclient.run(keys["token"])
 
 #def reset_function(client):
 #  asyncio.ensure_future(client.connect('irc.us.sorcery.net', 6667), loop=loop)
@@ -236,7 +236,7 @@ discordclient.run(clientdata["token"])
 #ircclient = IRCClient(reset_function)
 
 #reset_function(ircclient)
-#asyncio.ensure_future(discordclient.start(clientdata["token"]), loop=loop)
+#asyncio.ensure_future(discordclient.start(keys["token"]), loop=loop)
 #try:
 #  loop.run_forever()
 #except KeyboardInterrupt:
